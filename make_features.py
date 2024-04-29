@@ -34,7 +34,8 @@ def read_all() -> pd.DataFrame:
     """
     def read_file(file):
         df = read_cached(file).set_index('Page')
-        df.columns = df.columns.astype('M8[D]')
+        # df.columns = df.columns.astype('M8[D]')
+        df.columns = pd.to_datetime(df.columns)
         return df
 
     # Path to cached data
@@ -198,7 +199,10 @@ def lag_indexes(begin, end) -> List[pd.Series]:
 
     def lag(offset):
         dates = dr - offset
-        return pd.Series(data=base_index.loc[dates].fillna(-1).astype(np.int16).values, index=dr)
+        # return pd.Series(data=base_index.loc[dates].fillna(-1).astype(np.int16).values, index=dr)
+        breakpoint()
+        res = pd.Series([])
+        return res
 
     return [lag(pd.DateOffset(months=m)) for m in (3, 6, 9, 12)]
 
