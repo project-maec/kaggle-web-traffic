@@ -3,6 +3,8 @@
 # Jupyter Notebook
 .ipynb_checkpoints
 
+__pycache__/
+
 data/cpt
 data/logs
 data/vars
