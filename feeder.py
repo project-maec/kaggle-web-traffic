@@ -52,15 +52,15 @@ class VarFeeder:
 
         with tf.Graph().as_default():
             tensor_vars = self._build_vars()
-            placeholders = [tf.placeholder(tf.as_dtype(dtype), shape=shape) for dtype, shape in
+            placeholders = [tf.compat.v1.placeholder(tf.as_dtype(dtype), shape=shape) for dtype, shape in
                             zip(self.dtypes, self.shapes)]
             assigners = [tensor_var.assign(placeholder) for tensor_var, placeholder in
                          zip(tensor_vars, placeholders)]
             feed = {ph: v for ph, v in zip(placeholders, values)}
-            saver = tf.train.Saver(self._var_dict(tensor_vars), max_to_keep=1)
-            init = tf.global_variables_initializer()
+            saver = tf.compat.v1.train.Saver(self._var_dict(tensor_vars), max_to_keep=1)
+            init = tf.compat.v1.global_variables_initializer()
 
-            with tf.Session(config=tf.ConfigProto(device_count={'GPU': 0})) as sess:
+            with tf.compat.v1.Session(config=tf.ConfigProto(device_count={'GPU': 0})) as sess:
                 sess.run(init)
                 sess.run(assigners, feed_dict=feed)
                 save_path = os.path.join(path, 'feeder.cpt')
@@ -79,7 +79,7 @@ class VarFeeder:
             else:
                 empty = 0
             init = tf.constant(empty, shape=shape, dtype=tf_type)
-            return tf.get_local_variable(name=name, initializer=init, dtype=tf_type)
+            return tf.compat.v1.get_local_variable(name=name, initializer=init, dtype=tf_type)
 
         with tf.device("/cpu:0"):
             with tf.name_scope('feeder_vars'):

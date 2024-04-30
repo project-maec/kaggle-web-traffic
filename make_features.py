@@ -200,7 +200,7 @@ def lag_indexes(begin, end) -> List[pd.Series]:
     def lag(offset):
         dates = dr - offset
         # return pd.Series(data=base_index.loc[dates].fillna(-1).astype(np.int16).values, index=dr)
-        data_val = np.array([base_index.loc[x] if x in dr else -1 for x in dates])
+        data_val = pd.Series([base_index.loc[x] if x in dr else -1 for x in dates])
         res = pd.Series(data=data_val.astype(np.int16).values, index=dr)
         return res
 
